@@ -5,8 +5,8 @@
  */
 package com.anton.dev.sample.jaxrs.rest;
 
+import com.anton.dev.sample.jaxrs.util.ThreadPool;
 import com.anton.dev.sample.jaxrs.util.Utility;
-import java.util.concurrent.ExecutorService;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -22,7 +22,8 @@ import javax.ws.rs.core.MediaType;
 public class MyResourceNoSingleton {
 	
     private int count;
-    private final ExecutorService executorService = java.util.concurrent.Executors.newCachedThreadPool();
+    // private final ExecutorService executorService = java.util.concurrent.Executors.newCachedThreadPool();
+    private final ThreadPool pool = ThreadPool.getInstance();
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
@@ -36,7 +37,7 @@ public class MyResourceNoSingleton {
     @Produces(MediaType.TEXT_PLAIN)
     @Path("count/async")
     public void testMethod2(@Suspended final AsyncResponse asyncResponse) {
-        executorService.submit(new Runnable() {
+        pool.submit(new Runnable() {
             @Override
             public void run() {
                 asyncResponse.resume(doTestMethod2());
@@ -64,7 +65,7 @@ public class MyResourceNoSingleton {
     @Produces(MediaType.TEXT_PLAIN)
     @Path("count2/async")
     public void testMethod4(@Suspended final AsyncResponse asyncResponse) {
-        executorService.submit(new Runnable() {
+        pool.submit(new Runnable() {
             @Override
             public void run() {
                 try {

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="DEBUG">
     <Appenders>
-        <RollingFile name="RollingFile" fileName="./logs/sample-jaxrs.log"
-                     filePattern="./logs/sample-jaxrs-%i.log">
+        <RollingFile name="RollingFile" fileName="../logs/sample-jaxrs.log"
+                     filePattern="../logs/sample-jaxrs-%i.log">
             <PatternLayout pattern="%p [%d{yyyyMMdd HH:mm:ss.SSS}] - %-12C{} -%L - %m%n" />
             <Policies>
                 <SizeBasedTriggeringPolicy size="4 MB" />
