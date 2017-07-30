@@ -7,7 +7,6 @@ package com.anton.dev.sample.jaxrs.rest;
 
 import com.anton.dev.sample.jaxrs.util.Utility;
 import java.util.concurrent.ExecutorService;
-import javax.inject.Singleton;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -19,9 +18,8 @@ import javax.ws.rs.core.MediaType;
  *
  * @author anton
  */
-@Path("test-singleton")
-@Singleton
-public class MyResourceSingleton {
+@Path("test-no-singleton")
+public class MyResourceNoSingleton {
 	
     private int count;
     private final ExecutorService executorService = java.util.concurrent.Executors.newCachedThreadPool();
@@ -96,10 +94,15 @@ Testear los request con Apache HTTP server benchmarking tool
 instalacion
 $ sudo apt-get install apache2-utils
 
-$ ab -n1000 -c100 http://localhost:8084/sample-jaxrs/rest/test-singleton/count
-$ ab -n1000 -c100 http://localhost:8084/sample-jaxrs/rest/test-singleton/count/async
+$ ab -n1000 -c100 http://localhost:8084/sample-jaxrs/rest/test-no-singleton/count
+$ ab -n1000 -c100 http://localhost:8084/sample-jaxrs/rest/test-no-singleton/count/async
 
-$ ab -n100 -c100 http://localhost:8084/sample-jaxrs/rest/test-singleton/count2
-$ ab -n100 -c100 http://localhost:8084/sample-jaxrs/rest/test-singleton/count2/async
+$ ab -n100 -c100 http://localhost:8084/sample-jaxrs/rest/test-no-singleton/count2
+$ ab -n100 -c100 http://localhost:8084/sample-jaxrs/rest/test-no-singleton/count2/async
+
+el metodo async no es eficiente con un recurso no singleton
+por cada request se crea una instancia del recurso y un ""executorService"
+para este caso el "executorService" no es conveniente usarlo como propiedad del recurso
+deberia pertenecer a otro componente externo como singleton
 
 */
