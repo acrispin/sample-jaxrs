@@ -9,6 +9,9 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,7 +25,13 @@ public class ThreadPool implements IDisposable {
     private ExecutorService service;
     
     private ThreadPool() {
-        service = Executors.newCachedThreadPool();
+        // https://stackoverflow.com/questions/949355/executors-newcachedthreadpool-versus-executors-newfixedthreadpool
+        // https://stackoverflow.com/questions/17957382/fixedthreadpool-vs-cachedthreadpool-the-lesser-of-two-evils
+        // service = Executors.newCachedThreadPool();
+        // service = Executors.newFixedThreadPool(1000);
+        /* Se inicia el pool con 20 threads, 1000 maximo threads en el pool, 60 seg tiempo libre del thread para que salga del pool  */
+        service = new ThreadPoolExecutor(20, 1000, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>());
+        
         LOGGER.info("Instancia " + this.getClass().getName() + " creada" + " on thread: " + Thread.currentThread().getName());
     }
     

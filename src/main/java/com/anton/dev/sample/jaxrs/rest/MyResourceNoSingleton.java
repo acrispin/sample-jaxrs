@@ -106,4 +106,16 @@ por cada request se crea una instancia del recurso y un ""executorService"
 para este caso el "executorService" no es conveniente usarlo como propiedad del recurso
 deberia pertenecer a otro componente externo como singleton
 
+Con estas pruebas se muestra la mejora en usar async
+~ 100 req/seg
+$ ab -n1000 -c1000 http://localhost:8084/sample-jaxrs/rest/test-no-singleton/count2
+
+~ 110 req/seg
+$ ab -n2000 -c1000 http://localhost:8084/sample-jaxrs/rest/test-no-singleton/count2
+
+~ 300 req/seg
+$ ab -n1000 -c1000 http://localhost:8084/sample-jaxrs/rest/test-no-singleton/count2/async
+
+~ 360 req/seg
+$ ab -n2000 -c1000 http://localhost:8084/sample-jaxrs/rest/test-no-singleton/count2/async
 */
